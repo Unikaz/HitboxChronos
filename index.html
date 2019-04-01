@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chronos</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="all-chronos-container"></div>
+<div id="chrono_model" class="team_container" hidden>
+    <div class="chrono_container">
+        <div class="chrono_1">
+            <span class="chronotime">0:00:00:00</span>
+            <form name="chronoForm">
+                <input type="button" class="startstop button" value="START"/>
+                <input type="button" class="reset button" value="ADD"/>
+            </form>
+        </div>
+        <div class="chrono_2">
+            <span class="chronotime">0:00:00:00</span>
+            <form name="chronoForm">
+                <input type="button" class="startstop button" value="START"/>
+                <input type="button" class="reset button" value="ADD"/>
+            </form>
+        </div>
+    </div>
+    <ul class="values">
+    </ul>
+    <div class="results">
+        <span>Temps total de l'équipe :</span><br>
+        <span class="total">0</span>
+    </div>
+</div>
+
+<script src="gamepads.js"></script>
+<script src="chrono.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
