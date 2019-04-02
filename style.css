@@ -1,10 +1,7 @@
 body{
     font-size: 3em;
 }
-.button{
-    font-size: 0.5em;
-    border: none;
-}
+
 li{
     list-style: none;
     font-size: 0.5em;
@@ -16,14 +13,17 @@ input{
 }
 .startstop, .reset{
     width: 100px;
-    height: 45px;
     border-radius: 10px;
+    font-size: 0.3em;
+    border: none;
 }
-
 .chrono_container {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+}
+.chrono_container *{
+    text-align: center;
 }
 
 #all-chronos-container {
@@ -36,6 +36,14 @@ input{
     position: fixed;
     bottom: 0px;
     background-color: white;
+    width: 40%;
+}
+
+.results *{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-block;
 }
 
 .team_container {

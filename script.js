@@ -1,5 +1,7 @@
-function CustomChrono() {
+function CustomChrono(index) {
     var _this = this;
+    _this.index = index;
+    _this.listValues = [];
     let numPlayer = 0;
     let div = document.getElementById("chrono_model").cloneNode(true);
     let list = div.getElementsByTagName("ul")[0];
@@ -36,40 +38,54 @@ function CustomChrono() {
     };
 
     _this.btn2 = function(targetChrono) {
-        let diff = _this.chronos[targetChrono].diff.getTime() / 1000;
+        let diff = _this.chronos[targetChrono].diff.getTime();
         _this.addScore(diff);
         _this.chronos[targetChrono].Stop();
         _this.chronos[targetChrono].Reset();
     };
 
-    _this.addScore = function(diff) {
+    _this.addScore = function(diff, saveToStorage = true) {
+        _this.listValues.push(diff);
         let li = document.createElement("li");
         let input = document.createElement("input");
-        input.value = diff;
+        input.value = diff/1000;
         li.innerHTML = "Joueur " + ++numPlayer + " : ";
         input.addEventListener("change", function () {
+            _this.listValues = [];
+            let lis = div.getElementsByTagName("li");
+            for (let i = 0; i < lis.length; i++) {
+                _this.listValues.push(parseFloat(lis[i].getElementsByTagName("input")[0].value)*1000);
+            }
             recalculateTotal()
         });
         li.appendChild(input);
         list.appendChild(li);
         list.scrollBy(0, 1000);
-        recalculateTotal();
-    }
+        recalculateTotal(saveToStorage);
+    };
 
-    function recalculateTotal() {
+    function recalculateTotal(saveToStorage = true) {
         let totalValue = 0;
         let lis = div.getElementsByTagName("li");
         for (let i = 0; i < lis.length; i++) {
-            totalValue += parseFloat(lis[i].getElementsByTagName("input")[0].value);
+            totalValue += parseFloat(lis[i].getElementsByTagName("input")[0].value)*1000;
         }
-        total.innerHTML = totalValue.toFixed(3);
+        let date  = new Date(totalValue);
+        total.innerHTML = (date.getHours() > 1 ?(date.getHours()-1) + "h " : "") + date.getMinutes() + "m " + date.getSeconds() + "s " + date.getMilliseconds();
+        if(saveToStorage){
+            _this.saveToStorage(_this.listValues, _this.index);
+        }
     }
+
+    _this.saveToStorage = function(listValues, index){
+        localStorage.setItem("list"+index, JSON.stringify(listValues));
+    };
 
     return _this;
 }
 
-var doubleChrono1 = new CustomChrono();
-var doubleChrono2 = new CustomChrono();
+var doubleChrono1 = new CustomChrono(0);
+var doubleChrono2 = new CustomChrono(1);
 
 
 // Gamepad handling
@@ -89,9 +105,27 @@ addEventListener("buttonTemp", function (e) {
             break;
         case 6:
             doubleChrono.btn2(0);
+            // saveToStorage(doubleChrono.listValues, e.gamepad.index);
             break;
         case 7:
             doubleChrono.btn2(1);
+            // saveToStorage(doubleChrono.listValues, e.gamepad.index);
             break;
     }
 });
+
+// load/save data
+
+window.onload = function(){
+    // chronos 0
+    let values = JSON.parse(localStorage.getItem("list0"));
+    for(let i=0 ; i<values.length ; i++){
+        doubleChrono1.addScore(values[i], false);
+    }
+    // chronos 1
+    values = JSON.parse(localStorage.getItem("list1"));
+    for(let i=0 ; i<values.length ; i++){
+        doubleChrono2.addScore(values[i], false);
+    }
+}
+//

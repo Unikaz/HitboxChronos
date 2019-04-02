@@ -14,14 +14,14 @@
 <div id="chrono_model" class="team_container" hidden>
     <div class="chrono_container">
         <div class="chrono_1">
-            <span class="chronotime">0:00:00:00</span>
+            <span class="chronotime">00:00,000</span>
             <form name="chronoForm">
                 <input type="button" class="startstop button" value="START"/>
                 <input type="button" class="reset button" value="ADD"/>
             </form>
         </div>
         <div class="chrono_2">
-            <span class="chronotime">0:00:00:00</span>
+            <span class="chronotime">00:00,000</span>
             <form name="chronoForm">
                 <input type="button" class="startstop button" value="START"/>
                 <input type="button" class="reset button" value="ADD"/>
@@ -31,7 +31,7 @@
     <ul class="values">
     </ul>
     <div class="results">
-        <span>Temps total de l'équipe :</span><br>
+        <span>Temps total</span><br>
         <span class="total">0</span>
     </div>
 </div>
@@ -39,6 +39,28 @@
 <script src="gamepads.js"></script>
 <script src="chrono.js"></script>
 <script src="script.js"></script>
+<script>
+    var confirmOnLeave = function(msg) {
+
+        window.onbeforeunload = function (e) {
+            e = e || window.event;
+            msg = msg || '';
+
+            // For IE and Firefox
+            if (e) {e.returnValue = msg;}
+
+            // For Chrome and Safari
+            return msg;
+        };
+
+    };
+
+    // message de confirmation générique du navigateur
+    confirmOnLeave();
+
+    // message de confirmation personnalisé
+    confirmOnLeave('Vous allez perdre votre travail, êtes vous sûr(e) de vouloir quitter la page ?');
+</script>
 
 </body>
 </html>

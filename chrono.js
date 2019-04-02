@@ -34,7 +34,7 @@ var Chrono = function () {
         else if (msec < 100) {
             msec = "0" + msec
         }
-        _this.text = hr + ":" + min + ":" + sec + ":" + msec;
+        _this.text =  min + ":" + sec + "," + msec;
         _this.updateValue.value = _this.text;
         dispatchEvent(_this.updateValue);
         _this.timerID = setTimeout(function () {
@@ -77,7 +77,7 @@ var Chrono = function () {
     }
 
     _this.Reset = function () {
-        _this.text = "0:00:00:000";
+        _this.text = "00:00,000";
         _this.updateValue.value = _this.text;
         dispatchEvent(_this.updateValue);
         if (_this.targetText !== undefined)
