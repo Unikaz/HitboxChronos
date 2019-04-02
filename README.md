@@ -6,7 +6,7 @@ A chronometer for the animation of the Hitbox Makers Game Jam #6 (2019) Sathurda
 - Two groups of two chronometers
 - Each group controlled by a gamepad (with LB, LT, RB and RT buttons)
 - Each group has its list of scores
-- Each entry can be modify
+- Each entry can be modified
 - Each group has the total time
 - Ask before tab/page close
-- Record scores in localStorage and auto-restore on load
+- Records scores in localStorage and auto-restore on load
