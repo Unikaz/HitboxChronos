@@ -70,9 +70,6 @@ input{
 }
 
 .results > *{
-    /*position: relative;*/
-    /*left: 50%;*/
-    /*transform: translateX(-50%);*/
     display: inline-block;
     flex-grow: 1;
     text-align: center;

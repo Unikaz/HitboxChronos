@@ -35,6 +35,7 @@ function CustomChrono(index) {
     _this.chronos = {};
     _this.chronos[0] = chrono;
     _this.chronos[1] = chrono2;
+    _this.totalTimeMillis = 0;
     div.hidden = false;
     div.id = "";
     document.getElementById("all-chronos-container").appendChild(div);
@@ -62,11 +63,11 @@ function CustomChrono(index) {
         input.value = diff / 1000;
         li.innerHTML = "Joueur " + ++numPlayer + " : ";
         input.addEventListener("change", function () {
-            _this.listValues = [];
-            let lis = div.getElementsByTagName("li");
-            for (let i = 0; i < lis.length; i++) {
-                _this.listValues.push(parseFloat(lis[i].getElementsByTagName("input")[0].value) * 1000);
-            }
+            // _this.listValues = [];
+            // let lis = div.getElementsByTagName("li");
+            // for (let i = 0; i < lis.length; i++) {
+            //     _this.listValues.push(parseFloat(lis[i].getElementsByTagName("input")[0].value) * 1000);
+            // }
             recalculateTotal()
         });
         li.appendChild(input);
@@ -76,44 +77,73 @@ function CustomChrono(index) {
     };
 
     function recalculateTotal(saveToStorage = true) {
+        _this.listValues = [];
         let totalValue = 0;
         let lis = div.getElementsByClassName("values")[0].children;
         let bests = [Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE];
         let bestsPlayer = ["","",""];
         for (let i = 0; i < lis.length; i++) {
             let val = parseFloat(lis[i].getElementsByTagName("input")[0].value) * 1000;
+            _this.listValues.push(val);
             totalValue += val;
-            if(val <= bests[0]){
-                bests[2] = bests[1];
-                bestsPlayer[2] = bestsPlayer[1];
-                bests[1] = bests[0];
-                bestsPlayer[1] = bestsPlayer[0];
-                bests[0] = val;
-                bestsPlayer[0] = "Joueur " + (i+1) + " : " + val/1000;
-            }else if(val <= bests[1]){
-                bests[2] = bests[1];
-                bestsPlayer[2] = bestsPlayer[1];
-                bests[1] = val;
-                bestsPlayer[1] = "Joueur " + (i+1) + " : " + val/1000;
-            }else if(val <= bests[2]){
-                bests[2] = val;
-                bestsPlayer[2] = "Joueur " + (i+1) + " : " + val/1000;
+            if(val !== 0) {
+                if (val <= bests[0]) {
+                    bests[2] = bests[1];
+                    bestsPlayer[2] = bestsPlayer[1];
+                    bests[1] = bests[0];
+                    bestsPlayer[1] = bestsPlayer[0];
+                    bests[0] = val;
+                    bestsPlayer[0] = "Joueur " + (i + 1) + " : " + val / 1000;
+                } else if (val <= bests[1]) {
+                    bests[2] = bests[1];
+                    bestsPlayer[2] = bestsPlayer[1];
+                    bests[1] = val;
+                    bestsPlayer[1] = "Joueur " + (i + 1) + " : " + val / 1000;
+                } else if (val <= bests[2]) {
+                    bests[2] = val;
+                    bestsPlayer[2] = "Joueur " + (i + 1) + " : " + val / 1000;
+                }
             }
         }
         let bestDisplay = div.getElementsByClassName("best-scores")[0].children[0];
         bestDisplay.children[0].innerHTML = bestsPlayer[0];
         bestDisplay.children[1].innerHTML = bestsPlayer[1];
         bestDisplay.children[2].innerHTML = bestsPlayer[2];
-        let date = new Date(totalValue);
-        total.innerHTML = (date.getHours() > 1 ? (date.getHours() - 1) + "h " : "") + date.getMinutes() + "m " + date.getSeconds() + "s " + date.getMilliseconds();
+        _this.totalTimeMillis = totalValue;
         if (saveToStorage) {
             _this.saveToStorage(_this.listValues, _this.index);
         }
     }
 
+    _this.displayTotalTime = function(){
+        let time = _this.totalTimeMillis;
+        try {
+            time += _this.chronos[0].diff.getTime();
+        }catch(e){}
+        try {
+            time += _this.chronos[1].diff.getTime();
+        }catch(e){}
+
+        let date = new Date(time);
+        let h = (date.getHours() > 1 ? (date.getHours() - 1) + "h " : "");
+        let m = date.getMinutes() + "m ";
+        let s = (date.getSeconds() < 10 ? "0"+date.getSeconds() : date.getSeconds()) + "s ";
+        let ms = (date.getMilliseconds() < 10 ? "00"+date.getMilliseconds() : date.getMilliseconds() < 100 ? "0"+date.getMilliseconds() : date.getMilliseconds());
+
+        total.innerHTML = h + m + s + ms;
+
+        setTimeout(function(){
+            _this.displayTotalTime();
+        }, 10);
+    }
+
     _this.saveToStorage = function (listValues, index) {
         localStorage.setItem("list" + index, JSON.stringify(listValues));
     };
+
+    setTimeout(function(){
+        _this.displayTotalTime();
+    }, 10);
 
     return _this;
 }
