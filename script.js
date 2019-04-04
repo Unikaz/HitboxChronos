@@ -15,6 +15,9 @@ function CustomChrono(index) {
     div.getElementsByClassName("reset")[0].addEventListener("click", function () {
         _this.btn2(0);
     });
+    div.getElementsByClassName("cancel")[0].addEventListener("click", function () {
+        _this.btn3(0);
+    });
     // chrono 2
     let chrono2 = new Chrono();
     chrono2.setTargetText(div.getElementsByClassName("chronotime")[1]);
@@ -23,6 +26,9 @@ function CustomChrono(index) {
     });
     div.getElementsByClassName("reset")[1].addEventListener("click", function () {
         _this.btn2(1)
+    });
+    div.getElementsByClassName("cancel")[1].addEventListener("click", function () {
+        _this.btn3(1);
     });
 
     // general
@@ -43,6 +49,11 @@ function CustomChrono(index) {
         _this.chronos[targetChrono].Stop();
         _this.chronos[targetChrono].Reset();
     };
+
+    _this.btn3 = function(targetChrono){
+        _this.chronos[targetChrono].Stop();
+        _this.chronos[targetChrono].Reset();
+    }
 
     _this.addScore = function(diff, saveToStorage = true) {
         _this.listValues.push(diff);

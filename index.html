@@ -11,20 +11,23 @@
 </head>
 <body>
 <div id="all-chronos-container"></div>
+<div id="models" hidden>
 <div id="chrono_model" class="team_container" hidden>
     <div class="chrono_container">
         <div class="chrono_1">
             <span class="chronotime">00:00,000</span>
             <form name="chronoForm">
-                <input type="button" class="startstop button" value="START"/>
-                <input type="button" class="reset button" value="ADD"/>
+                <input type="button" class="startstop button" value="DÉPART/PAUSE"/>
+                <input type="button" class="reset button" value="ARRIVÉE"/>
+                <input type="button" class="cancel button" value="ANNULER"/>
             </form>
         </div>
         <div class="chrono_2">
             <span class="chronotime">00:00,000</span>
             <form name="chronoForm">
-                <input type="button" class="startstop button" value="START"/>
-                <input type="button" class="reset button" value="ADD"/>
+                <input type="button" class="startstop button" value="DÉPART/PAUSE"/>
+                <input type="button" class="reset button" value="ARRIVÉE"/>
+                <input type="button" class="cancel button" value="ANNULER"/>
             </form>
         </div>
     </div>
@@ -34,6 +37,7 @@
         <span>Temps total</span><br>
         <span class="total">0</span>
     </div>
+</div>
 </div>
 
 <script src="gamepads.js"></script>
