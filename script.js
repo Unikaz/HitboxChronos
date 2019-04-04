@@ -39,33 +39,33 @@ function CustomChrono(index) {
     div.id = "";
     document.getElementById("all-chronos-container").appendChild(div);
 
-    _this.btn1 = function(targetChrono) {
+    _this.btn1 = function (targetChrono) {
         _this.chronos[targetChrono].StartPause()
     };
 
-    _this.btn2 = function(targetChrono) {
+    _this.btn2 = function (targetChrono) {
         let diff = _this.chronos[targetChrono].diff.getTime();
         _this.addScore(diff);
         _this.chronos[targetChrono].Stop();
         _this.chronos[targetChrono].Reset();
     };
 
-    _this.btn3 = function(targetChrono){
+    _this.btn3 = function (targetChrono) {
         _this.chronos[targetChrono].Stop();
         _this.chronos[targetChrono].Reset();
     }
 
-    _this.addScore = function(diff, saveToStorage = true) {
+    _this.addScore = function (diff, saveToStorage = true) {
         _this.listValues.push(diff);
         let li = document.createElement("li");
         let input = document.createElement("input");
-        input.value = diff/1000;
+        input.value = diff / 1000;
         li.innerHTML = "Joueur " + ++numPlayer + " : ";
         input.addEventListener("change", function () {
             _this.listValues = [];
             let lis = div.getElementsByTagName("li");
             for (let i = 0; i < lis.length; i++) {
-                _this.listValues.push(parseFloat(lis[i].getElementsByTagName("input")[0].value)*1000);
+                _this.listValues.push(parseFloat(lis[i].getElementsByTagName("input")[0].value) * 1000);
             }
             recalculateTotal()
         });
@@ -77,19 +77,42 @@ function CustomChrono(index) {
 
     function recalculateTotal(saveToStorage = true) {
         let totalValue = 0;
-        let lis = div.getElementsByTagName("li");
+        let lis = div.getElementsByClassName("values")[0].children;
+        let bests = [Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE];
+        let bestsPlayer = ["","",""];
         for (let i = 0; i < lis.length; i++) {
-            totalValue += parseFloat(lis[i].getElementsByTagName("input")[0].value)*1000;
+            let val = parseFloat(lis[i].getElementsByTagName("input")[0].value) * 1000;
+            totalValue += val;
+            if(val <= bests[0]){
+                bests[2] = bests[1];
+                bestsPlayer[2] = bestsPlayer[1];
+                bests[1] = bests[0];
+                bestsPlayer[1] = bestsPlayer[0];
+                bests[0] = val;
+                bestsPlayer[0] = "Joueur " + (i+1) + " : " + val/1000;
+            }else if(val <= bests[1]){
+                bests[2] = bests[1];
+                bestsPlayer[2] = bestsPlayer[1];
+                bests[1] = val;
+                bestsPlayer[1] = "Joueur " + (i+1) + " : " + val/1000;
+            }else if(val <= bests[2]){
+                bests[2] = val;
+                bestsPlayer[2] = "Joueur " + (i+1) + " : " + val/1000;
+            }
         }
-        let date  = new Date(totalValue);
-        total.innerHTML = (date.getHours() > 1 ?(date.getHours()-1) + "h " : "") + date.getMinutes() + "m " + date.getSeconds() + "s " + date.getMilliseconds();
-        if(saveToStorage){
+        let bestDisplay = div.getElementsByClassName("best-scores")[0].children[0];
+        bestDisplay.children[0].innerHTML = bestsPlayer[0];
+        bestDisplay.children[1].innerHTML = bestsPlayer[1];
+        bestDisplay.children[2].innerHTML = bestsPlayer[2];
+        let date = new Date(totalValue);
+        total.innerHTML = (date.getHours() > 1 ? (date.getHours() - 1) + "h " : "") + date.getMinutes() + "m " + date.getSeconds() + "s " + date.getMilliseconds();
+        if (saveToStorage) {
             _this.saveToStorage(_this.listValues, _this.index);
         }
     }
 
-    _this.saveToStorage = function(listValues, index){
-        localStorage.setItem("list"+index, JSON.stringify(listValues));
+    _this.saveToStorage = function (listValues, index) {
+        localStorage.setItem("list" + index, JSON.stringify(listValues));
     };
 
     return _this;
@@ -127,15 +150,15 @@ addEventListener("buttonTemp", function (e) {
 
 // load/save data
 
-window.onload = function(){
+window.onload = function () {
     // chronos 0
     let values = JSON.parse(localStorage.getItem("list0"));
-    for(let i=0 ; i<values.length ; i++){
+    for (let i = 0; i < values.length; i++) {
         doubleChrono1.addScore(values[i], false);
     }
     // chronos 1
     values = JSON.parse(localStorage.getItem("list1"));
-    for(let i=0 ; i<values.length ; i++){
+    for (let i = 0; i < values.length; i++) {
         doubleChrono2.addScore(values[i], false);
     }
 }

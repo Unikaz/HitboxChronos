@@ -66,11 +66,18 @@ input{
 
 .results {
     padding: 20px;
+    display: flex;
 }
 
-.results *{
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
+.results > *{
+    /*position: relative;*/
+    /*left: 50%;*/
+    /*transform: translateX(-50%);*/
     display: inline-block;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.best-scores {
+    padding-top: 15px;
 }
